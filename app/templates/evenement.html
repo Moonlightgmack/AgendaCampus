@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block titre %}{{ evenement.titre }} | {{ NOM_APPLICATION }}{% endblock %}
+
+{% block contenu %}
+<p><a href="/">&larr; Tous les événements</a></p>
+
+<article class="detail">
+  <header>
+    <h1>{{ evenement.titre }}</h1>
+    <p class="detail__meta">
+      <time datetime="{{ evenement.debut.isoformat() }}">{{ evenement.debut | date_fr }}</time>
+      · {{ evenement.lieu }}
+    </p>
+  </header>
+  {# Jinja échappe automatiquement le HTML : une description contenant
+     <script> s'affiche comme du texte et ne s'exécute pas (protection XSS). #}
+  <p class="detail__description">{{ evenement.description }}</p>
+  <p class="badge {{ 'badge--complet' if places <= 0 else '' }}" id="places" aria-live="polite">
+    {% if places <= 0 %}Complet{% else %}{{ places }} place{{ 's' if places > 1 }} restante{{ 's' if places > 1 }}{% endif %}
+  </p>
+</article>
+
+{% if message == "inscrit" %}
+  <p class="alerte alerte--succes" role="status">Votre inscription est enregistrée. À bientôt !</p>
+{% elif message == "cree" %}
+  <p class="alerte alerte--succes" role="status">L'événement a été créé.</p>
+{% endif %}
+
+<section class="panneau" aria-labelledby="titre-inscription">
+  <h2 id="titre-inscription">S'inscrire</h2>
+  <div id="retour" aria-live="polite">
+    {% if erreurs.general %}<p class="alerte alerte--erreur">{{ erreurs.general }}</p>{% endif %}
+  </div>
+  <form id="form-inscription" method="post" action="/evenements/{{ evenement.id }}/inscription"
+        data-api="/api/evenements/{{ evenement.id }}/inscriptions" novalidate>
+    <div class="champ">
+      <label for="nom">Nom complet</label>
+      <input id="nom" name="nom" required minlength="2" maxlength="80" autocomplete="name"
+             value="{{ valeurs.nom or '' }}" {% if erreurs.nom %}aria-invalid="true" aria-describedby="err-nom"{% endif %}>
+      {% if erreurs.nom %}<p class="erreur" id="err-nom">{{ erreurs.nom }}</p>{% endif %}
+    </div>
+    <div class="champ">
+      <label for="email">Adresse e-mail</label>
+      <input id="email" name="email" type="email" required maxlength="120" autocomplete="email"
+             value="{{ valeurs.email or '' }}" {% if erreurs.email %}aria-invalid="true" aria-describedby="err-email"{% endif %}>
+      {% if erreurs.email %}<p class="erreur" id="err-email">{{ erreurs.email }}</p>{% endif %}
+    </div>
+    <button type="submit" class="bouton" {% if places <= 0 %}disabled{% endif %}>Je m'inscris</button>
+  </form>
+</section>
+{% endblock %}

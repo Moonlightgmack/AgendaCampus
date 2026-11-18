@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block titre %}Page introuvable | {{ NOM_APPLICATION }}{% endblock %}
+
+{% block contenu %}
+<section class="vide">
+  <h1>Page introuvable</h1>
+  <p>L'événement demandé n'existe pas, ou a été supprimé.</p>
+  <p><a class="bouton" href="/">Revenir à la liste des événements</a></p>
+</section>
+{% endblock %}

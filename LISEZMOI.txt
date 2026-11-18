@@ -1,0 +1,20 @@
+Compléments de la séance 3
+==========================
+
+Copiez le contenu de ce dossier dans votre projet agendacampus, en acceptant
+de remplacer les fichiers existants (vos routeurs et vos gabarits ne sont pas
+concernés). Fichiers fournis :
+
+  requirements.txt            ajoute sqlmodel
+  requirements-postgres.txt   pilote PostgreSQL (utilisé par l'image Docker)
+  app/config.py               lit DATABASE_URL dans l'environnement
+  app/database.py             moteur, création des tables, session par requête
+  app/models.py               tables evenement et inscription
+  app/demo.py                 données de démonstration, écrites en base
+  app/services.py             couche métier avec SQLModel (à compléter : partie C)
+  Dockerfile, compose.yaml    exécution avec Docker et PostgreSQL (option)
+  .env.example, .dockerignore, .gitignore
+
+Puis réinstallez les dépendances, sans connexion Internet, avec le dossier wheelhouse du kit :
+  pip install --no-index --find-links=..\wheelhouse -r requirements.txt
+(avec une connexion, pip install -r requirements.txt suffit)

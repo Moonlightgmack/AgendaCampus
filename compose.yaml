@@ -1,0 +1,28 @@
+# Lancement : docker compose up --build
+# Application : http://localhost:8000 ; base de données : PostgreSQL (service db)
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-agenda}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-agenda-mot-de-passe}
+      POSTGRES_DB: ${POSTGRES_DB:-agendacampus}
+    volumes:
+      - donnees-pg:/var/lib/postgresql/data   # les données survivent aux redémarrages
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 10
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-agenda}:${POSTGRES_PASSWORD:-agenda-mot-de-passe}@db:5432/${POSTGRES_DB:-agendacampus}
+    depends_on:
+      db:
+        condition: service_healthy   # attendre que PostgreSQL accepte les connexions
+
+volumes:
+  donnees-pg:

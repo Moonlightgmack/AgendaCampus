@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titre %}Nouvel événement | {{ NOM_APPLICATION }}{% endblock %}
+
+{% macro champ(nom, libelle, type="text", attrs="") %}
+  <div class="champ">
+    <label for="{{ nom }}">{{ libelle }}</label>
+    <input id="{{ nom }}" name="{{ nom }}" type="{{ type }}" value="{{ valeurs[nom] or '' }}" {{ attrs }}
+           {% if erreurs[nom] %}aria-invalid="true" aria-describedby="err-{{ nom }}"{% endif %}>
+    {% if erreurs[nom] %}<p class="erreur" id="err-{{ nom }}">{{ erreurs[nom] }}</p>{% endif %}
+  </div>
+{% endmacro %}
+
+{% block contenu %}
+<h1>Créer un événement</h1>
+<form class="panneau" method="post" action="/evenements/nouveau">
+  {{ champ("titre", "Titre", attrs='required minlength=3 maxlength=120') }}
+  {{ champ("lieu", "Lieu", attrs='required minlength=2 maxlength=120') }}
+  {{ champ("debut", "Date et heure de début", type="datetime-local", attrs='required') }}
+  {{ champ("capacite", "Capacité (nombre de places)", type="number", attrs='required min=1 max=1000') }}
+  <div class="champ">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="5" maxlength="2000">{{ valeurs.description or '' }}</textarea>
+    {% if erreurs.description %}<p class="erreur">{{ erreurs.description }}</p>{% endif %}
+  </div>
+  <button type="submit" class="bouton">Enregistrer</button>
+</form>
+{% endblock %}

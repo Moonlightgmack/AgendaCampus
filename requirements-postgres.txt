@@ -1,0 +1,2 @@
+# Uniquement si vous utilisez PostgreSQL (installé par l'image Docker)
+psycopg[binary]==3.3.9
