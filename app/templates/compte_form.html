@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block titre %}Créer un compte | {{ NOM_APPLICATION }}{% endblock %}
+
+{% block contenu %}
+<h1>Créer un compte organisateur</h1>
+<form class="panneau panneau--etroit" method="post" action="/compte/creer">
+  <div class="champ">
+    <label for="nom">Nom</label>
+    <input id="nom" name="nom" required minlength="2" value="{{ valeurs.nom or '' }}">
+    {% if erreurs.nom %}<p class="erreur">{{ erreurs.nom }}</p>{% endif %}
+  </div>
+  <div class="champ">
+    <label for="email">Adresse e-mail</label>
+    <input id="email" name="email" type="email" required autocomplete="username" value="{{ valeurs.email or '' }}">
+    {% if erreurs.email %}<p class="erreur">{{ erreurs.email }}</p>{% endif %}
+  </div>
+  <div class="champ">
+    <label for="mot_de_passe">Mot de passe (8 caractères minimum)</label>
+    <input id="mot_de_passe" name="mot_de_passe" type="password" required minlength="8" autocomplete="new-password">
+    {% if erreurs.mot_de_passe %}<p class="erreur">{{ erreurs.mot_de_passe }}</p>{% endif %}
+  </div>
+  <button type="submit" class="bouton">Créer mon compte</button>
+</form>
+{% endblock %}

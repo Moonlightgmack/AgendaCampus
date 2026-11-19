@@ -9,4 +9,11 @@ import os
 # PostgreSQL quand on lance l'application avec docker compose.
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./agendacampus.db")
 
+<<<<<<< HEAD
+=======
+# Clé utilisée pour signer le cookie de session (séance 4).
+# En production, elle DOIT être fournie par l'environnement.
+SECRET_KEY = os.getenv("SECRET_KEY", "cle-de-developpement-a-changer")
+
+>>>>>>> be0ad84 (seance 4: securite)
 NOM_APPLICATION = "AgendaCampus"

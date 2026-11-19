@@ -13,7 +13,11 @@
     </p>
   </header>
   {# Jinja échappe automatiquement le HTML : une description contenant
+<<<<<<< HEAD
      <script> s'affiche comme du texte et ne s'exécute pas (protection XSS). #}
+=======
+     s'affiche comme du texte et ne s'exécute pas (protection XSS). #}
+>>>>>>> be0ad84 (seance 4: securite)
   <p class="detail__description">{{ evenement.description }}</p>
   <p class="badge {{ 'badge--complet' if places <= 0 else '' }}" id="places" aria-live="polite">
     {% if places <= 0 %}Complet{% else %}{{ places }} place{{ 's' if places > 1 }} restante{{ 's' if places > 1 }}{% endif %}
@@ -49,3 +53,10 @@
   </form>
 </section>
 {% endblock %}
+<<<<<<< HEAD
+=======
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/inscription.js') }}" defer></script>
+{% endblock %}
+>>>>>>> be0ad84 (seance 4: securite)

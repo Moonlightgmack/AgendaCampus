@@ -3,6 +3,7 @@
 Les pages utilisent la même couche métier (services) que l'API JSON :
 deux « présentations » différentes, une seule logique.
 """
+<<<<<<< HEAD
 from fastapi import APIRouter, Form, Request, status
 from fastapi.responses import RedirectResponse
 from pydantic import ValidationError
@@ -13,6 +14,19 @@ from app.templating import templates
 from fastapi import Depends
 from sqlmodel import Session
 from app.database import get_session
+=======
+from fastapi import APIRouter, Depends, Form, Request, status
+from fastapi.responses import RedirectResponse
+from pydantic import ValidationError
+from sqlmodel import Session
+
+from app import services
+from app.database import get_session
+from app.schemas import EvenementCreation, InscriptionCreation
+from app.templating import templates
+from app.models import Utilisateur
+from app.securite import utilisateur_optionnel
+>>>>>>> be0ad84 (seance 4: securite)
 
 router = APIRouter(include_in_schema=False)
 
@@ -42,6 +56,7 @@ def erreurs_lisibles(exc: ValidationError) -> dict[str, str]:
 @router.get("/")
 def accueil(
     request: Request,
+<<<<<<< HEAD
     q: str | None = None, session: Session = Depends(get_session)
 ):
     evenements = services.lister_evenements(session,q,True)
@@ -49,13 +64,35 @@ def accueil(
     return templates.TemplateResponse(
         request, "index.html",
         {"evenements": evenements, "places": places, "q": q or ""},
+=======
+    q: str | None = None,
+    session: Session = Depends(get_session),
+     utilisateur: Utilisateur | None = Depends(utilisateur_optionnel)
+):
+    evenements = services.lister_evenements(session, q)
+    places = {e.id: services.places_restantes(session, e) for e in evenements}
+    return templates.TemplateResponse(
+        request, "index.html",
+        {"evenements": evenements, "places": places, "q": q or "","utilisateur": utilisateur},
+>>>>>>> be0ad84 (seance 4: securite)
     )
 
 
 @router.get("/evenements/nouveau")
+<<<<<<< HEAD
 def formulaire_creation(request: Request):
     return templates.TemplateResponse(
         request, "evenement_form.html", {"valeurs": {}, "erreurs": {}}
+=======
+def formulaire_creation(request: Request, utilisateur: Utilisateur | None = Depends(utilisateur_optionnel)):
+    if utilisateur is None:
+        return RedirectResponse(
+            "/connexion?suivant=/evenements/nouveau",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+    return templates.TemplateResponse(
+        request, "evenement_form.html", {"valeurs": {}, "erreurs": {},"utilisateur": utilisateur,}
+>>>>>>> be0ad84 (seance 4: securite)
     )
 
 
@@ -67,8 +104,20 @@ def creer_evenement(
     lieu: str = Form(""),
     debut: str = Form(""),
     capacite: str = Form(""),
+<<<<<<< HEAD
     session: Session = Depends(get_session)
 ):
+=======
+    session: Session = Depends(get_session),
+    utilisateur: Utilisateur | None = Depends(utilisateur_optionnel)
+):
+    if utilisateur is None:
+        return RedirectResponse(
+        "/connexion?suivant=/evenements/nouveau",
+        status_code=status.HTTP_303_SEE_OTHER
+        )
+
+>>>>>>> be0ad84 (seance 4: securite)
     valeurs = {"titre": titre, "description": description, "lieu": lieu, "debut": debut, "capacite": capacite}
     try:
         donnees = EvenementCreation(**valeurs)
@@ -76,10 +125,17 @@ def creer_evenement(
         # On ré-affiche le formulaire AVEC les valeurs saisies et les erreurs : 422.
         return templates.TemplateResponse(
             request, "evenement_form.html",
+<<<<<<< HEAD
             {"valeurs": valeurs, "erreurs": erreurs_lisibles(exc)},
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
         )
     evenement = services.creer_evenement(donnees)
+=======
+            {"valeurs": valeurs, "erreurs": erreurs_lisibles(exc),"utilisateur": utilisateur,},
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+        )
+    evenement = services.creer_evenement(session, donnees,organisateur_id=utilisateur.id)
+>>>>>>> be0ad84 (seance 4: securite)
     # Post/Redirect/Get : après un POST réussi, on redirige (303) vers une page GET.
     return RedirectResponse(f"/evenements/{evenement.id}?message=cree", status.HTTP_303_SEE_OTHER)
 
@@ -89,10 +145,18 @@ def detail_evenement(
     request: Request,
     evenement_id: int,
     message: str | None = None,
+<<<<<<< HEAD
     session: Session = Depends(get_session)
 ):
     try:
         evenement = services.obtenir_evenement(session,evenement_id)
+=======
+    session: Session = Depends(get_session),
+     utilisateur: Utilisateur | None = Depends(utilisateur_optionnel)
+):
+    try:
+        evenement = services.obtenir_evenement(session, evenement_id)
+>>>>>>> be0ad84 (seance 4: securite)
     except services.EvenementIntrouvable:
         return templates.TemplateResponse(
             request, "404.html", {}, status_code=status.HTTP_404_NOT_FOUND
@@ -101,10 +165,18 @@ def detail_evenement(
         request, "evenement.html",
         {
             "evenement": evenement,
+<<<<<<< HEAD
             "places": services.places_restantes(session,evenement),
             "message": message,
             "erreurs": {},
             "valeurs": {},
+=======
+            "places": services.places_restantes(session, evenement),
+            "message": message,
+            "erreurs": {},
+            "valeurs": {},
+            "utilisateur": utilisateur,
+>>>>>>> be0ad84 (seance 4: securite)
         },
     )
 
@@ -115,12 +187,21 @@ def inscription_formulaire(
     evenement_id: int,
     nom: str = Form(""),
     email: str = Form(""),
+<<<<<<< HEAD
     session: Session = Depends(get_session)
+=======
+    session: Session = Depends(get_session),
+     utilisateur: Utilisateur | None = Depends(utilisateur_optionnel)
+>>>>>>> be0ad84 (seance 4: securite)
 ):
     valeurs = {"nom": nom, "email": email}
     erreurs: dict[str, str] = {}
     try:
+<<<<<<< HEAD
         services.inscrire(session,evenement_id, InscriptionCreation(**valeurs))
+=======
+        services.inscrire(session, evenement_id, InscriptionCreation(**valeurs))
+>>>>>>> be0ad84 (seance 4: securite)
         return RedirectResponse(f"/evenements/{evenement_id}?message=inscrit", status.HTTP_303_SEE_OTHER)
     except services.EvenementIntrouvable:
         return templates.TemplateResponse(
@@ -132,11 +213,16 @@ def inscription_formulaire(
         erreurs, code = {"general": "Désolé, cet événement est complet."}, status.HTTP_409_CONFLICT
     except services.DejaInscrit:
         erreurs, code = {"email": "Cette adresse est déjà inscrite à cet événement."}, status.HTTP_409_CONFLICT
+<<<<<<< HEAD
     evenement = services.obtenir_evenement(session,evenement_id)
+=======
+    evenement = services.obtenir_evenement(session, evenement_id)
+>>>>>>> be0ad84 (seance 4: securite)
     return templates.TemplateResponse(
         request, "evenement.html",
         {
             "evenement": evenement,
+<<<<<<< HEAD
             "places": services.places_restantes(session,evenement),
             "message": None,
             "erreurs": erreurs,
@@ -145,3 +231,13 @@ def inscription_formulaire(
         status_code=code,
     )
 
+=======
+            "places": services.places_restantes(session, evenement),
+            "message": None,
+            "erreurs": erreurs,
+            "valeurs": valeurs,
+            "utilisateur": utilisateur,
+        },
+        status_code=code,
+    )
+>>>>>>> be0ad84 (seance 4: securite)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Compléments de la séance 3
 ==========================
 
@@ -14,6 +15,26 @@ concernés). Fichiers fournis :
   app/services.py             couche métier avec SQLModel (à compléter : partie C)
   Dockerfile, compose.yaml    exécution avec Docker et PostgreSQL (option)
   .env.example, .dockerignore, .gitignore
+=======
+Compléments de la séance 4
+==========================
+
+Copiez le contenu de ce dossier dans votre projet agendacampus, en acceptant
+de remplacer les fichiers existants. ATTENTION : models.py ajoute la table
+utilisateur et la colonne organisateur_id ; arrêtez le serveur et supprimez
+agendacampus.db avant de relancer (avec Docker : docker compose down -v).
+
+  requirements.txt                 ajoute itsdangerous (session), pytest et httpx2 (tests)
+  app/config.py                    ajoute SECRET_KEY
+  app/models.py                    table utilisateur, organisateur d'un événement
+  app/services.py                  creer_evenement() enregistre l'organisateur
+  app/securite.py                  hachage des mots de passe, utilisateur connecté (partie B)
+  app/routers/auth.py              création de compte, connexion, déconnexion
+  app/templates/connexion.html, compte_form.html
+  app/static/js/inscription.js     inscription sans rechargement (partie D)
+  tests/                           tests automatisés (partie F)
+  compose.yaml, .env.example       ajoutent SECRET_KEY
+>>>>>>> be0ad84 (seance 4: securite)
 
 Puis réinstallez les dépendances, sans connexion Internet, avec le dossier wheelhouse du kit :
   pip install --no-index --find-links=..\wheelhouse -r requirements.txt

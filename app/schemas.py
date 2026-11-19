@@ -1,8 +1,13 @@
 """Schémas d'échange : ce qui entre dans l'application et ce qui en sort.
 
+<<<<<<< HEAD
 Pydantic vérifie automatiquement chaque donnée reçue (type, longueur,
 bornes). Le client n'envoie jamais l'identifiant : c'est le serveur qui
 l'attribue, d'où deux schémas distincts pour la création et la lecture.
+=======
+Ils sont distincts des modèles de table (models.py) : le client n'envoie
+jamais l'identifiant, et ne reçoit que les champs qu'on choisit d'exposer.
+>>>>>>> be0ad84 (seance 4: securite)
 """
 from pydantic import BaseModel, Field, NaiveDatetime
 

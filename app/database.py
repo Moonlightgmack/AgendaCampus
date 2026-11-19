@@ -7,7 +7,11 @@ from app.config import DATABASE_URL
 # utilisée par un autre thread que celui qui l'a créée ; FastAPI, lui,
 # peut traiter une requête sur un thread différent.
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+<<<<<<< HEAD
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
+=======
+engine = create_engine(DATABASE_URL, connect_args=connect_args,echo=False)
+>>>>>>> be0ad84 (seance 4: securite)
 
 
 def creer_tables() -> None:

@@ -13,11 +13,37 @@
     <div class="conteneur entete__barre">
       <a class="logo" href="/">{{ NOM_APPLICATION }}</a>
       <nav aria-label="Navigation principale">
+<<<<<<< HEAD
         <ul class="menu">
           <li><a href="/">Événements</a></li>
           <li><a href="/evenements/nouveau">Créer un événement</a></li>
         </ul>
       </nav>
+=======
+    <ul class="menu">
+        <li><a href="/">Événements</a></li>
+
+        {% if utilisateur %}
+            <li>
+                <a href="/evenements/nouveau">Créer un événement</a>
+            </li>
+
+            <li>
+                <form action="/deconnexion" method="post">
+                    <button type="submit">
+                        Déconnexion ({{ utilisateur.nom }})
+                    </button>
+                </form>
+            </li>
+
+        {% else %}
+            <li>
+                <a href="/organisateur">Espace organisateur</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+>>>>>>> be0ad84 (seance 4: securite)
     </div>
   </header>
 
@@ -33,3 +59,8 @@
   {% block scripts %}{% endblock %}
 </body>
 </html>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> be0ad84 (seance 4: securite)

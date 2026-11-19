@@ -56,8 +56,13 @@ def obtenir_evenement(session: Session, evenement_id: int) -> Evenement:
     return evenement
 
 
+<<<<<<< HEAD
 def creer_evenement(session: Session, donnees: EvenementCreation) -> Evenement:
     evenement = Evenement(**donnees.model_dump())
+=======
+def creer_evenement(session: Session, donnees: EvenementCreation, organisateur_id: int | None = None) -> Evenement:
+    evenement = Evenement(**donnees.model_dump(), organisateur_id=organisateur_id)
+>>>>>>> be0ad84 (seance 4: securite)
     session.add(evenement)
     session.commit()
     session.refresh(evenement)
@@ -86,6 +91,7 @@ def inscrire(session: Session, evenement_id: int, donnees: InscriptionCreation) 
     evenement = obtenir_evenement(session, evenement_id)
     if places_restantes(session, evenement) <= 0:
         raise EvenementComplet(evenement_id)
+<<<<<<< HEAD
     # TODO (partie C) :
     #   1. créer l'objet Inscription (adresse e-mail en minuscules)
     #   2. l'ajouter à la session et valider (commit)
@@ -104,3 +110,14 @@ def inscrire(session: Session, evenement_id: int, donnees: InscriptionCreation) 
 
     return inscription
     raise NotImplementedError
+=======
+    inscription = Inscription(evenement_id=evenement_id, nom=donnees.nom, email=donnees.email.lower())
+    session.add(inscription)
+    try:
+        session.commit()
+    except IntegrityError:  # contrainte UNIQUE(evenement_id, email) violée
+        session.rollback()
+        raise DejaInscrit(donnees.email)
+    session.refresh(inscription)
+    return inscription
+>>>>>>> be0ad84 (seance 4: securite)

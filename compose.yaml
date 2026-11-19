@@ -20,6 +20,10 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-agenda}:${POSTGRES_PASSWORD:-agenda-mot-de-passe}@db:5432/${POSTGRES_DB:-agendacampus}
+<<<<<<< HEAD
+=======
+      SECRET_KEY: ${SECRET_KEY:-cle-de-developpement-a-changer}
+>>>>>>> be0ad84 (seance 4: securite)
     depends_on:
       db:
         condition: service_healthy   # attendre que PostgreSQL accepte les connexions

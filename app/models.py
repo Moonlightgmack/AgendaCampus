@@ -5,6 +5,18 @@ from pydantic import NaiveDatetime
 from sqlmodel import Field, SQLModel, UniqueConstraint
 
 
+<<<<<<< HEAD
+=======
+class Utilisateur(SQLModel, table=True):
+    """Un organisateur d'événements (séance 4)."""
+
+    id: int | None = Field(default=None, primary_key=True)
+    email: str = Field(index=True, unique=True, max_length=120)
+    nom: str = Field(max_length=80)
+    mot_de_passe_hash: str
+
+
+>>>>>>> be0ad84 (seance 4: securite)
 class Evenement(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     titre: str = Field(max_length=120)
@@ -14,6 +26,10 @@ class Evenement(SQLModel, table=True):
     # Une application multi-pays stockerait plutôt des dates UTC.
     debut: NaiveDatetime = Field(index=True)
     capacite: int
+<<<<<<< HEAD
+=======
+    organisateur_id: int | None = Field(default=None, foreign_key="utilisateur.id")
+>>>>>>> be0ad84 (seance 4: securite)
 
 
 class Inscription(SQLModel, table=True):
